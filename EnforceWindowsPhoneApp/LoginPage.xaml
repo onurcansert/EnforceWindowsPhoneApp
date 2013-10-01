@@ -1,0 +1,59 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="EnforceWindowsPhoneApp.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <Grid x:Name="LayoutRoot" Background="#222222">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="0,0,0,25" Background="#222222">
+            <TextBlock Text="Enforce" Style="{StaticResource PhoneTextNormalStyle}" Margin="65,12,0,11" VerticalAlignment="Center" HorizontalAlignment="Left" />
+            <!--<Image x:Name="EnforceLogo" Height="50" Margin="10,0,408,0" Source="/Resources/logo.png" VerticalAlignment="Center" HorizontalAlignment="Left" />-->
+        </StackPanel>
+
+        <Grid x:Name="LoginPanel" Grid.Row="1" Margin="12,0,12,0">
+            <Image x:Name="EnforceLogo" Margin="123,10,126,502" Source="/Assets/logo.png" VerticalAlignment="Center" Height="181" />
+            <TextBlock Text="Enforce" Style="{StaticResource PhoneTextNormalStyle}" Margin="101,191,104,413" VerticalAlignment="Center" FontSize="72" Height="89" FontFamily="Arial" />
+
+            <Border CornerRadius="5,5,5,5" Margin="36,298,34,347" Background="#FF3B5998" />
+            <Button Content="Log In" Margin="55,298,52,0" VerticalAlignment="Top" Height="48" Background="#FF3B5998" BorderThickness="0" Padding="0" FontSize="18"/>
+
+            <Border BorderBrush="White" BorderThickness="1" HorizontalAlignment="Left" Height="1" Margin="25,365,0,0" VerticalAlignment="Top" Width="406" RenderTransformOrigin="0.5,0.5" />
+            <TextBlock Text="VEYA" Style="{StaticResource PhoneTextNormalStyle}" Margin="202,378,203,290" VerticalAlignment="Center" FontSize="18" Height="25" FontFamily="Arial" />
+            <Border BorderBrush="White" BorderThickness="1" Height="1" Margin="25,410,25,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"/>
+
+            <Border CornerRadius="5,5,5,5" Margin="36,426,34,145" Background="White" />
+            <TextBox Name="EMailTextBox" HorizontalAlignment="Left" Height="61" Margin="36,426,0,0" TextWrapping="Wrap" Text="E-Posta" VerticalAlignment="Top" Width="386" 
+                     FontSize="18" Padding="30,0,0,0" GotFocus="EMailTextBox_GotFocus" LostFocus="EMailTextBox_LostFocus">
+                <TextBox.Background>
+                    <ImageBrush ImageSource="/Assets/Icons/email.png" AlignmentX="Left" Stretch="None"/>
+                </TextBox.Background>
+            </TextBox>
+            
+            <Border BorderBrush="Gray" BorderThickness="1" Height="1" Margin="45,487,45,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"/>
+
+            <TextBox Name="PasswordTextBox" HorizontalAlignment="Left" Height="61" Margin="36,487,0,0" TextWrapping="Wrap" Text="Şifre" VerticalAlignment="Top" Width="386" 
+                     FontSize="18" Padding="30,0,0,0" GotFocus="PasswordTextBox_GotFocus" LostFocus="PasswordTextBox_LostFocus">
+                <TextBox.Background>
+                    <ImageBrush ImageSource="/Assets/Icons/lock.png" AlignmentX="Left" Stretch="None"/>
+                </TextBox.Background>
+            </TextBox>
+            <Border CornerRadius="5,5,5,5" Margin="36,567,34,78" Background="#FF7DB833" />
+            <Button Content="GİRİŞ YAP" Margin="25,567,25,0" VerticalAlignment="Top" Height="48" Background="#FF7DB833" BorderThickness="0" Padding="0" FontSize="18" Click="GirisYap_Click"/>
+        </Grid>
+    </Grid>
+
+</phone:PhoneApplicationPage>

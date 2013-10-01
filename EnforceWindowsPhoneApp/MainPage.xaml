@@ -1,0 +1,73 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="EnforceWindowsPhoneApp.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <phone:PhoneApplicationPage.Resources>
+        <DataTemplate x:Key="ComplaintItemTemplate">
+            <Grid Margin="0,6,0,0">
+                <Rectangle Fill="#FFFFFF" HorizontalAlignment="Left" 
+                           Height="539" Width="436" Margin="10,0,0,10" 
+                           Stroke="Transparent" VerticalAlignment="Top" />
+
+                <Image x:Name="ComplaintImage" HorizontalAlignment="Left" 
+                       Height="436" Width="436" Margin="10,51,0,0" 
+                       VerticalAlignment="Top" Source="{Binding Source}"  />
+
+                <TextBlock Name="ComplaintText" HorizontalAlignment="Left" 
+                         Height="51" TextWrapping="Wrap" Text="{Binding Title}" 
+                         VerticalAlignment="Top" Width="456" FontSize="18" 
+                         FontWeight="Bold" Padding="17" Margin="10,-5,0,0"
+                         Foreground="Black"/>
+
+                <Image HorizontalAlignment="Left" Height="47" 
+                       Margin="20,492,0,0" VerticalAlignment="Top" Width="48"
+                       Source="/Assets/Icons/up.png"/>
+                <Image HorizontalAlignment="Left" Height="47" 
+                       Margin="94,492,0,0" VerticalAlignment="Top" Width="48"
+                       Source="/Assets/Icons/comment.png"/>
+                <Image HorizontalAlignment="Left" Height="19" 
+                       Margin="384,508,0,0" VerticalAlignment="Top" Width="48"
+                       Source="/Assets/Icons/more.png"/>
+            </Grid>
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
+
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton Click="HotList_Click" IconUri="/Assets/Icons/hot.png" Text="Hot" />
+            <shell:ApplicationBarIconButton Click="TopList_Click" IconUri="/Assets/Icons/popular.png" Text="Top"/>
+            <shell:ApplicationBarIconButton Click="RecentList_Click" IconUri="/Assets/Icons/recent.png" Text="Top"/>
+            <shell:ApplicationBarIconButton Click="RecentList_Click" IconUri="/Assets/Icons/near.png" Text="Top"/>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+
+    <Grid x:Name="LayoutRoot" Background="#DDDDDD">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="0,0,0,25" Background="#222222">
+            <TextBlock Text="Enforce" Style="{StaticResource PhoneTextNormalStyle}" Margin="65,12,0,11" VerticalAlignment="Center" HorizontalAlignment="Left" />
+            <!--<Image x:Name="EnforceLogo" Height="50" Margin="10,0,408,0" Source="/Resources/logo.png" VerticalAlignment="Center" HorizontalAlignment="Left" />-->
+        </StackPanel>
+
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <phone:LongListSelector Name="ComplaintResults"
+                                    ItemTemplate="{StaticResource ComplaintItemTemplate}"
+                                    ItemsSource="{Binding ComplaintList}" />
+        </Grid>
+    </Grid>
+
+</phone:PhoneApplicationPage>
