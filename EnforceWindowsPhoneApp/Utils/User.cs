@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -37,6 +38,12 @@ namespace EnforceWindowsPhoneApp.Utils
             user.Email = (String)jObjectUser["email"];
 
             return user;
+        }
+
+        public async static Task<String> Login(String json)
+        {
+            String responseContent = await Request.Post("login", json);
+            return responseContent;
         }
     }
 }

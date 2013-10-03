@@ -80,14 +80,16 @@ namespace EnforceWindowsPhoneApp.Utils
             if (complaint.ImageURLs.Count > 0)
             {
                 //complaint.Source = new BitmapImage(new Uri("http://enforceapp.com" + complaint.ImageURLs[0], UriKind.Absolute));
+                //BitmapImage(new Uri("http://enforceapp.com" + complaint.ImageURLs[0], UriKind.Absolute));
 
                 BitmapImage bmp = new BitmapImage();
                 bmp.SetSource(Application.GetResourceStream(new Uri(@"Assets/loading.png", UriKind.Relative)).Stream);
                 complaint.Source = bmp;
-
-                WebClient wc = new WebClient();
+                
+                //var res = Image.DownloadImage(complaint.ImageURLs[0]);
+                /*WebClient wc = new WebClient();
                 wc.OpenReadCompleted += new OpenReadCompletedEventHandler(wc_OpenReadCompleted);
-                wc.OpenReadAsync(new Uri("http://enforceapp.com" + complaint.ImageURLs[0], UriKind.Absolute), wc);
+                wc.OpenReadAsync(new Uri("http://enforceapp.com" + complaint.ImageURLs[0], UriKind.Absolute), wc);*/
             }
             else
             {
@@ -103,6 +105,14 @@ namespace EnforceWindowsPhoneApp.Utils
             complaint.Reporter = reporter;
 
             return complaint;
+        }
+
+        public String toJson()
+        {
+            string json = "";
+            json = JsonConvert.SerializeObject(this);
+            Complaint c = JsonConvert.DeserializeObject<Complaint>(json);
+            return json;
         }
 
         public static void wc_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
@@ -121,6 +131,12 @@ namespace EnforceWindowsPhoneApp.Utils
             {
                 //Either cancelled or error handle appropriately for your app
             }
+        }
+
+        public async static Task<String> GetComplaints(String url)
+        {
+            String responseContent = await Request.Get(url);
+            return responseContent;
         }
 
         //public System.Windows.Media.ImageSource Source { get {return this.Source; } set { this.Source = new BitmapImage(new Uri("ms-appx:///Assets/loading.png")); } }

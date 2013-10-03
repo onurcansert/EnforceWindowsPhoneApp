@@ -15,30 +15,40 @@
 
     <phone:PhoneApplicationPage.Resources>
         <DataTemplate x:Key="ComplaintItemTemplate">
-            <Grid Margin="0,6,0,0">
-                <Rectangle Fill="#FFFFFF" HorizontalAlignment="Left" 
-                           Height="539" Width="436" Margin="10,0,0,10" 
-                           Stroke="Transparent" VerticalAlignment="Top" />
-
-                <Image x:Name="ComplaintImage" HorizontalAlignment="Left" 
-                       Height="436" Width="436" Margin="10,51,0,0" 
-                       VerticalAlignment="Top" Source="{Binding Source}"  />
-
-                <TextBlock Name="ComplaintText" HorizontalAlignment="Left" 
-                         Height="51" TextWrapping="Wrap" Text="{Binding Title}" 
+            <Grid Margin="0,0,0,15" Background="White">
+                <StackPanel>
+                    <TextBlock Name="ComplaintText" HorizontalAlignment="Left"
+                         Height="Auto" TextWrapping="Wrap" Text="{Binding Title}" 
                          VerticalAlignment="Top" Width="456" FontSize="18" 
-                         FontWeight="Bold" Padding="17" Margin="10,-5,0,0"
-                         Foreground="Black"/>
+                         FontWeight="Bold" Padding="17"
+                         Foreground="Black" />
+                    <Image x:Name="ComplaintImage" HorizontalAlignment="Left" 
+                       Height="456" Width="456" 
+                       VerticalAlignment="Top" Source="{Binding Source}" Margin="0,0,0,0"  />
 
-                <Image HorizontalAlignment="Left" Height="47" 
-                       Margin="20,492,0,0" VerticalAlignment="Top" Width="48"
-                       Source="/Assets/Icons/up.png"/>
-                <Image HorizontalAlignment="Left" Height="47" 
-                       Margin="94,492,0,0" VerticalAlignment="Top" Width="48"
-                       Source="/Assets/Icons/comment.png"/>
-                <Image HorizontalAlignment="Left" Height="19" 
+                    <Grid Height="55" Margin="0 15 0 0">
+                        <Image HorizontalAlignment="Left" Height="47" 
+                       VerticalAlignment="Top" Width="48"
+                       Source="/Assets/Icons/up.png" Margin="22,0,0,0"/>
+
+                        <Image HorizontalAlignment="Left" Height="47" 
+                       VerticalAlignment="Top" Width="48"
+                       Source="/Assets/Icons/comment.png" Margin="99,0,0,0"/>
+
+                        <Button Height="60"  VerticalAlignment="Top"
+                        Click="Deneme_Click" DataContext="{Binding Id}" Margin="345,-5,0,0" BorderThickness="0">
+
+                            <Image HorizontalAlignment="Left" Height="14" 
+                           VerticalAlignment="Top" Width="48"
+                           Source="/Assets/Icons/more.png"/>
+
+                        </Button>
+                    </Grid>
+                </StackPanel>
+
+                <!--<Image HorizontalAlignment="Left" Height="19" 
                        Margin="384,508,0,0" VerticalAlignment="Top" Width="48"
-                       Source="/Assets/Icons/more.png"/>
+                       Source="/Assets/Icons/more.png"/>-->
             </Grid>
         </DataTemplate>
     </phone:PhoneApplicationPage.Resources>

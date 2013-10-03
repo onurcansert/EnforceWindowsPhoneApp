@@ -9,51 +9,72 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using EnforceWindowsPhoneApp.Resources;
 using EnforceWindowsPhoneApp.Utils;
+using System.Windows.Media.Imaging;
+using System.IO;
+using System.Threading;
 
 namespace EnforceWindowsPhoneApp
 {
     public partial class MainPage : PhoneApplicationPage
     {
+        List<Complaint> complaintList = null;
+
         // Constructor
         public MainPage()
         {
             InitializeComponent();
-
-            String url = "http://api.enforceapp.com/complaint/hot";
-            WebClient client = new WebClient();
-            client.DownloadStringCompleted += dowloadComplaintListFromAPI;
-            client.DownloadStringAsync(new Uri(url, UriKind.Absolute));
+            DownloadComplaints("complaint/hot");
         }
 
-        private void dowloadComplaintListFromAPI(object sender, DownloadStringCompletedEventArgs e)
+        public async void DownloadComplaints(String url)
         {
-            String jsonResult = e.Result;
+            String responseContent = await Complaint.GetComplaints(url);
             ComplaintResults.ItemsSource = null;
-            ComplaintResults.ItemsSource = Complaint.parseList(jsonResult);
+            complaintList = Complaint.parseList(responseContent);
+            ComplaintResults.ItemsSource = complaintList;
+            DownloadComplaintImages();
         }
+
+        public async void DownloadComplaintImages()
+        {
+            for (int i = 0; i < ComplaintResults.ItemsSource.Count; i++)
+            {
+                //complaintList[i].Source = new BitmapImage(new Uri("http://enforceapp.com" + complaintList[i].ImageURLs[0], UriKind.Absolute));
+                complaintList[i].Source = await EnforceWindowsPhoneApp.Utils.Image.DownloadImage(complaintList[i].ImageURLs[0]);
+                ComplaintResults.ItemsSource = null;
+                ComplaintResults.ItemsSource = complaintList;
+            }
+        }
+
 
         private void HotList_Click(object sender, EventArgs e)
         {
-            String url = "http://api.enforceapp.com/complaint/hot";
-            WebClient client = new WebClient();
-            client.DownloadStringCompleted += dowloadComplaintListFromAPI;
-            client.DownloadStringAsync(new Uri(url, UriKind.Absolute));
+            DownloadComplaints("complaint/hot");
         }
 
         private void RecentList_Click(object sender, EventArgs e)
         {
-            String url = "http://api.enforceapp.com/complaint/recent";
-            WebClient client = new WebClient();
-            client.DownloadStringCompleted += dowloadComplaintListFromAPI;
-            client.DownloadStringAsync(new Uri(url, UriKind.Absolute));
+            DownloadComplaints("complaint/recent");
         }
 
         private void TopList_Click(object sender, EventArgs e)
         {
-            String url = "http://api.enforceapp.com/complaint/top";
-            WebClient client = new WebClient();
-            client.DownloadStringCompleted += dowloadComplaintListFromAPI;
-            client.DownloadStringAsync(new Uri(url, UriKind.Absolute));
+            DownloadComplaints("complaint/top");
+        }
+
+        private void Deneme_Click(object sender, EventArgs e)
+        {
+            String selectedComplaintId = (String)((System.Windows.Controls.Primitives.ButtonBase)(sender)).DataContext;
+            int selectedComplaintIndex = -1;
+            for (int i = 0; i < ComplaintResults.ItemsSource.Count; i++)
+            {
+                if (((Complaint)ComplaintResults.ItemsSource[i]).Id == selectedComplaintId)
+                {
+                    selectedComplaintIndex = i;
+                }
+            }
+            PhoneApplicationService.Current.State["Complaint"] = (Complaint)ComplaintResults.ItemsSource[selectedComplaintIndex];
+            NavigationService.Navigate(new Uri("/DetailsPage.xaml", UriKind.Relative));
         }
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.Phone.Shell;
 using EnforceWindowsPhoneApp.Utils;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EnforceWindowsPhoneApp
 {
@@ -70,7 +71,7 @@ namespace EnforceWindowsPhoneApp
             }
         }
 
-        private void GirisYap_Click(object sender, EventArgs e)
+        private async void GirisYap_Click(object sender, EventArgs e)
         {
             email = EMailTextBox.Text;
             password = PasswordTextBox.Text;
@@ -84,53 +85,9 @@ namespace EnforceWindowsPhoneApp
                 return;
             }
 
-            String url = "http://api.enforceapp.com/login";
-            HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
-            webRequest.Method = "POST";
-            webRequest.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), webRequest);
-            
-        }
-
-        void GetRequestStreamCallback(IAsyncResult asynchronousResult)
-        {
-            HttpWebRequest webRequest = (HttpWebRequest)asynchronousResult.AsyncState;
-            Stream postStream = webRequest.EndGetRequestStream(asynchronousResult);
-
             //String json = @"{""email"":""onur@onur.com"",""password"":""123""}";
             String json = "{\"email\" : \"" + email + "\", \"password\" : \"" + password + "\"}";
-
-            byte[] byteArray = Encoding.UTF8.GetBytes(json);
-
-            postStream.Write(byteArray, 0, byteArray.Length);
-            postStream.Close();
-            webRequest.BeginGetResponse(new AsyncCallback(GetResponseCallback), webRequest);
-        }
-
-        void GetResponseCallback(IAsyncResult asynchronousResult)
-        {
-            try
-            {
-                HttpWebRequest webRequest = (HttpWebRequest)asynchronousResult.AsyncState;
-                HttpWebResponse response = (HttpWebResponse)webRequest.EndGetResponse(asynchronousResult);
-                Stream streamResponse = response.GetResponseStream();
-                StreamReader streamReader = new StreamReader(streamResponse);
-
-                String Response = streamReader.ReadToEnd();
-                streamResponse.Close();
-                streamReader.Close();
-                response.Close();
-
-                Dispatcher.BeginInvoke(() =>
-                {
-                    NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
-                });
-            }
-            catch (Exception e){
-                Dispatcher.BeginInvoke(() =>
-                {
-                    MessageBox.Show("Hatalı e-posta veya şifre.");
-                });
-            }
+            var res = await User.Login(json);
         }
 
     }
