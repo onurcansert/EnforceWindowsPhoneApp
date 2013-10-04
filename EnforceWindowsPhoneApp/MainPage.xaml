@@ -73,7 +73,7 @@
             <!--<Image x:Name="EnforceLogo" Height="50" Margin="10,0,408,0" Source="/Resources/logo.png" VerticalAlignment="Center" HorizontalAlignment="Left" />-->
         </StackPanel>
 
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="15,0,15,0">
             <phone:LongListSelector Name="ComplaintResults"
                                     ItemTemplate="{StaticResource ComplaintItemTemplate}"
                                     ItemsSource="{Binding ComplaintList}" />
