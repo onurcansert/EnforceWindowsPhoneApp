@@ -15,40 +15,44 @@
 
     <phone:PhoneApplicationPage.Resources>
         <DataTemplate x:Key="ComplaintItemTemplate">
-            <Grid Margin="0,0,0,15" Background="White">
-                <StackPanel>
-                    <TextBlock Name="ComplaintText" HorizontalAlignment="Left"
-                         Height="Auto" TextWrapping="Wrap" Text="{Binding Title}" 
-                         VerticalAlignment="Top" Width="456" FontSize="18" 
-                         FontWeight="Bold" Padding="17"
-                         Foreground="Black" />
-                    <Image x:Name="ComplaintImage" HorizontalAlignment="Left" 
-                       Height="456" Width="456" 
-                       VerticalAlignment="Top" Source="{Binding Source}" Margin="0,0,0,0"  />
+            <Grid Background="White" Height="Auto" Grid.Row="0" Margin="15, 0, 0, 15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                    <Grid Height="55" Margin="0 15 0 0">
-                        <Image HorizontalAlignment="Left" Height="47" 
-                       VerticalAlignment="Top" Width="48"
-                       Source="/Assets/Icons/up.png" Margin="22,0,0,0"/>
+                <TextBlock x:Name="ComplaintTitle" MinHeight="25" Height="Auto" Width="405" Grid.Row="0"
+                            TextWrapping="Wrap" Text="{Binding Title}" Margin="5, 10, 5, 10"
+                            FontSize="18" FontWeight="Bold" Foreground="Black" />
+                
+                <Image x:Name="ComplaintImage" Height="426" Width="426" Grid.Row="1"
+                           Source="{Binding Source}" />
+                
+                <Grid Background="Transparent" Height="60" Grid.Row="2" Margin="0, 0, 0, 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                        <Image HorizontalAlignment="Left" Height="47" 
-                       VerticalAlignment="Top" Width="48"
-                       Source="/Assets/Icons/comment.png" Margin="99,0,0,0"/>
+                    <Button VerticalAlignment="Top" HorizontalAlignment="Left" 
+                        Click="NewComplaint_Click" DataContext="{Binding Id}" Margin="0" BorderThickness="0">
+                        <Image HorizontalAlignment="Left" Height="35" VerticalAlignment="Top" Width="30"
+                               Source="/Assets/Icons/up.png"/>
+                    </Button>
+                    
+                    <Button VerticalAlignment="Top" HorizontalAlignment="Left"
+                        Click="ComplaintMore_Click" DataContext="{Binding Id}" Margin="50, 0,0,0" BorderThickness="0">
+                        <Image HorizontalAlignment="Left" Height="35" VerticalAlignment="Top" Width="30"
+                               Source="/Assets/Icons/comment.png"/>
+                    </Button>
+                    
+                    <Button VerticalAlignment="Top" HorizontalAlignment="Right"
+                        Click="ComplaintMore_Click" DataContext="{Binding Id}" Margin="0, 10, 0, 0" BorderThickness="0">
+                        <Image HorizontalAlignment="Left" Height="15" VerticalAlignment="Top" Width="35"
+                               Source="/Assets/Icons/more.png"/>
+                    </Button>
+                </Grid>
 
-                        <Button Height="60"  VerticalAlignment="Top"
-                        Click="Deneme_Click" DataContext="{Binding Id}" Margin="345,-5,0,0" BorderThickness="0">
-
-                            <Image HorizontalAlignment="Left" Height="14" 
-                           VerticalAlignment="Top" Width="48"
-                           Source="/Assets/Icons/more.png"/>
-
-                        </Button>
-                    </Grid>
-                </StackPanel>
-
-                <!--<Image HorizontalAlignment="Left" Height="19" 
-                       Margin="384,508,0,0" VerticalAlignment="Top" Width="48"
-                       Source="/Assets/Icons/more.png"/>-->
             </Grid>
         </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
@@ -57,8 +61,8 @@
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
             <shell:ApplicationBarIconButton Click="HotList_Click" IconUri="/Assets/Icons/hot.png" Text="Hot" />
             <shell:ApplicationBarIconButton Click="TopList_Click" IconUri="/Assets/Icons/popular.png" Text="Top"/>
-            <shell:ApplicationBarIconButton Click="RecentList_Click" IconUri="/Assets/Icons/recent.png" Text="Top"/>
-            <shell:ApplicationBarIconButton Click="RecentList_Click" IconUri="/Assets/Icons/near.png" Text="Top"/>
+            <shell:ApplicationBarIconButton Click="RecentList_Click" IconUri="/Assets/Icons/recent.png" Text="Recent"/>
+            <shell:ApplicationBarIconButton Click="RecentList_Click" IconUri="/Assets/Icons/near.png" Text="Near"/>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 
@@ -73,10 +77,11 @@
             <!--<Image x:Name="EnforceLogo" Height="50" Margin="10,0,408,0" Source="/Resources/logo.png" VerticalAlignment="Center" HorizontalAlignment="Left" />-->
         </StackPanel>
 
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="15,0,15,0">
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12, 0, 12, 0">
             <phone:LongListSelector Name="ComplaintResults"
                                     ItemTemplate="{StaticResource ComplaintItemTemplate}"
-                                    ItemsSource="{Binding ComplaintList}" />
+                                    ItemsSource="{Binding ComplaintList}"
+                                    ItemRealized="ComplaintResults_ItemRealized" />
         </Grid>
     </Grid>
 

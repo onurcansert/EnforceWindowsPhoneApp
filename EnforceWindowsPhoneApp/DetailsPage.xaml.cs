@@ -16,6 +16,8 @@ using Windows.Devices.Geolocation;
 using Microsoft.Phone.Maps.Controls;
 using System.Windows.Shapes;
 using System.Windows.Media;
+using Microsoft.Phone.Maps.Toolkit;
+using System.Windows.Media.Imaging;
 
 namespace EnforceWindowsPhoneApp
 {
@@ -29,26 +31,34 @@ namespace EnforceWindowsPhoneApp
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
 
-            Complaint tmpComplaint = PhoneApplicationService.Current.State["Complaint"] as Complaint;    
+            Complaint tmpComplaint = PhoneApplicationService.Current.State["Complaint"] as Complaint;
             ComplaintTitle.Text = tmpComplaint.Title;
             ComplaintImage.Source = tmpComplaint.Source;
             ComplaintCategory.Text = tmpComplaint.Category;
             ComplaintAddress.Text = tmpComplaint.Address;
 
             List<Comment> ComplaintCommentList = new List<Comment>();
-            Comment c1 = new Comment();
-            c1.Id = "Onur";
-            c1.Text = "Acayip güzel bir problem bu bayıldım ;)";
-
-            Comment c2 = new Comment();
-            c2.Id = "Onur";
-            c2.Text = "Acayip güzel bir problem bu bayıldım ;)";
-
-            ComplaintCommentList.Add(c1);
-            ComplaintCommentList.Add(c2);
-
             ComplaintComments.ItemsSource = ComplaintCommentList;
 
+            String responseContent = await Comment.GetComments("comments/" + tmpComplaint.Id);
+            ComplaintComments.ItemsSource = null;
+            
+            ComplaintCommentList = Comment.parseList(responseContent);
+            if (ComplaintCommentList.Count > 0)
+            {
+                IlkYorumButton.Visibility = Visibility.Collapsed;
+                ComplaintComments.Visibility = Visibility.Visible;
+                TumYorumlarButton.Visibility = Visibility.Visible;
+                ComplaintComments.ItemsSource = ComplaintCommentList;
+                TumYorumlarButton.Content = "Tüm Yorumları Görüntüle (" + ComplaintCommentList.Count + ")";
+            }
+            else
+            {
+                IlkYorumButton.Visibility = Visibility.Visible;
+                ComplaintComments.Visibility = Visibility.Collapsed;
+                TumYorumlarButton.Visibility = Visibility.Collapsed;
+            }
+            
             /*MapOverlay overlay = new MapOverlay
             {
                 GeoCoordinate = ComplaintMap.Center,
@@ -65,9 +75,22 @@ namespace EnforceWindowsPhoneApp
             ComplaintMap.Layers.Add(layer);*/
 
             //Geolocator locator = new Geolocator();            
+            ComplaintMap.Center = new GeoCoordinate(tmpComplaint.Longitude, tmpComplaint.Latitude);
             //ComplaintMap.Center = new GeoCoordinate(39.916123, 32.8539379);
             //ComplaintMap.SetView(new GeoCoordinate(39.916123D, 32.8539379D), 17D);
-            //ComplaintMap.ZoomLevel = 3;
+            ComplaintMap.ZoomLevel = 16;
+
+            Pushpin pushpin = new Pushpin();
+            pushpin.GeoCoordinate = new GeoCoordinate(tmpComplaint.Longitude, tmpComplaint.Latitude);
+            pushpin.Template = (ControlTemplate)(this.Resources["MyPushPinTemplate"]);
+
+            MapOverlay pinOverlay = new MapOverlay();
+            pinOverlay.Content = pushpin;
+            pinOverlay.GeoCoordinate = new GeoCoordinate(tmpComplaint.Longitude, tmpComplaint.Latitude);
+
+            MapLayer pinLayer = new MapLayer();
+            pinLayer.Add(pinOverlay);
+            ComplaintMap.Layers.Add(pinLayer);
         }
     }
 }

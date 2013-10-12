@@ -11,7 +11,9 @@ namespace EnforceWindowsPhoneApp.Utils
 {
     class Request
     {
-        public static String domain = "http://api.enforceapp.com/";        
+        private static String domain = "http://devel.enforceapp.com/";
+        private static HttpClient client = new HttpClient();                
+
 
         /*public void MakeRequest(String param, String json)
         {
@@ -60,7 +62,6 @@ namespace EnforceWindowsPhoneApp.Utils
             String responseContent = "";
             try
             {
-                HttpClient client = new HttpClient();
                 responseContent = await client.GetStringAsync(domain + url);
             }
             catch (Exception e) { }
@@ -73,9 +74,29 @@ namespace EnforceWindowsPhoneApp.Utils
             String responseContent = "";
             try
             {
-                HttpClient client = new HttpClient();
                 StringContent postContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
                 HttpResponseMessage res = await client.PostAsync((domain + url), postContent);
+                if (res.StatusCode == HttpStatusCode.NotFound)
+                {
+                    responseContent = "";
+                }
+                else
+                {
+                    responseContent = await res.Content.ReadAsStringAsync();
+                }
+            }
+            catch (Exception e) { }
+
+            return responseContent;
+        }
+
+        public async static Task<String> GoogleGeoCodePost(double latitude, double longitude)
+        {
+            String responseContent = "";
+            try
+            {
+                HttpClient googleClient = new HttpClient();
+                HttpResponseMessage res = await client.GetAsync("http://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&sensor=true");
                 if (res.StatusCode == HttpStatusCode.NotFound)
                 {
                     responseContent = "";

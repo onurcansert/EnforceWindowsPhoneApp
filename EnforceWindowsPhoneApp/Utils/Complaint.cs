@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -33,14 +34,16 @@ namespace EnforceWindowsPhoneApp.Utils
         public String PublicURL { get; set; }
         public String SlugURL { get; set; }
 
+        public String capturedImageByteArrayBase64 { get; set; }
+
         public System.Windows.Media.ImageSource Source { get; set; }
 
-        public static List<Complaint> parseList(String jsonResult)
+        public static ObservableCollection<Complaint> parseList(String jsonResult)
         {
             Object obj = JsonConvert.DeserializeObject(jsonResult);
             JContainer jContainer = (JContainer)(((JArray)(obj)));
 
-            List<Complaint> complaints = new List<Complaint>();
+            ObservableCollection<Complaint> complaints = new ObservableCollection<Complaint>();
             for (int i = 0; i < jContainer.Count; i++)
             {
                 Complaint complaint = new Complaint();
@@ -109,10 +112,22 @@ namespace EnforceWindowsPhoneApp.Utils
 
         public String toJson()
         {
-            string json = "";
-            json = JsonConvert.SerializeObject(this);
-            Complaint c = JsonConvert.DeserializeObject<Complaint>(json);
-            return json;
+            JObject jObjectComplaint = new JObject();
+            try
+            {
+                jObjectComplaint.Add("title", this.Title);
+                jObjectComplaint.Add("category", this.Category);
+                jObjectComplaint.Add("city", this.City);
+                jObjectComplaint.Add("address", this.Address);                
+
+                JArray jArrayGeo = new JArray();
+                jArrayGeo.Add(this.Latitude);
+                jArrayGeo.Add(this.Longitude);
+                jObjectComplaint.Add("location", jArrayGeo);
+                jObjectComplaint.Add("pic", capturedImageByteArrayBase64);
+            }
+            catch (Exception e) { }
+            return jObjectComplaint.ToString();
         }
 
         public static void wc_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)

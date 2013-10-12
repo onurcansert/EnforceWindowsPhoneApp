@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:maps="clr-namespace:Microsoft.Phone.Maps.Controls;assembly=Microsoft.Phone.Maps"
+    xmlns:sltkit= "clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     x:Class="EnforceWindowsPhoneApp.DetailPage"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -15,6 +16,10 @@
     shell:SystemTray.IsVisible="True">
 
     <phone:PhoneApplicationPage.Resources>
+        <ControlTemplate  x:Key="MyPushPinTemplate">
+            <Image Source="/Assets/Icons/pushpin.png"></Image>
+        </ControlTemplate >
+        
         <DataTemplate x:Key="ComplaintCommentTemplate">
             <Grid Background="White" Height="Auto" Margin="0, 10, 0, 0">
                 <Grid.RowDefinitions>
@@ -24,25 +29,25 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock x:Name="ComplaintComment1" Grid.Row="0" MinHeight="25" Height="Auto" Width="405"
+                <TextBlock x:Name="ComplaintComment" Grid.Row="0" MinHeight="25" Height="Auto" Width="405"
                             TextWrapping="Wrap" Text="{Binding Text}"
 					        FontSize="18" FontWeight="Medium"
 					        Foreground="#000000" Margin="0" TextAlignment="Left" />
 
-                <Image x:Name="ComplaintCommentUserImage" Height="40" Width="40" Grid.Row="1"
-                           Source="{Binding Source}" Margin="0" HorizontalAlignment="Left" />
+                <Image x:Name="ComplaintCommentUserImage" Height="30" Width="30" Grid.Row="1"
+                           Source="{Binding Author.Avatar}" Margin="10, 5, 5, 10" HorizontalAlignment="Left" />
 
                 <TextBlock x:Name="ComplaintCommentUser" Grid.Row="1" MinHeight="25" Height="Auto" Width="405"
-                            TextWrapping="Wrap" Text="{Binding Id}"
+                            TextWrapping="Wrap" Text="{Binding Author.Name}"
 					        FontSize="16" FontWeight="Bold"
-					        Foreground="#888888" Margin="45, 10, 0, 0" TextAlignment="Left" />
+					        Foreground="#888888" Margin="45, 8, 0, 0" TextAlignment="Left" />
 
                 <Border Height="1" Grid.Row="2" Margin="0,0,0,0" Width="436" HorizontalAlignment="Center" 
                         Background="#D0D0D0" />
             </Grid>
         </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
-    
+
     <Grid x:Name="LayoutRoot" Background="#DDDDDD">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -54,7 +59,7 @@
         </StackPanel>
 
         <ScrollViewer Background="#DDDDDD" Height="Auto" Grid.Row="1">
-            <Grid x:Name="ContentPanel" Margin="12,15,12,0">
+            <Grid x:Name="ContentPanel" Margin="12,0,12,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -62,7 +67,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Grid Background="White" Height="Auto" Grid.Row="0" Margin="15, 0, 15, 15">
+                <Grid Background="White" Height="Auto" Grid.Row="0" Margin="15, 0, 15, 10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -73,34 +78,34 @@
                            Source="{Binding Source}" Margin="0" />
 
                     <TextBlock x:Name="ComplaintTitle" MinHeight="25" Height="Auto" Width="405" Grid.Row="1"
-                            TextWrapping="Wrap" Text="{Binding Title}" 
-                            FontSize="18" FontWeight="Bold" Foreground="Black" Margin="0" />
+                            TextWrapping="Wrap" Text="{Binding Title}" Margin="5, 10, 5, 5"
+                            FontSize="18" FontWeight="Bold" Foreground="Black" />
 
                     <TextBlock x:Name="ComplaintCategory" MinHeight="25" Height="Auto" Width="405" Grid.Row="2"
                             TextWrapping="Wrap" Text="{Binding Category}" 
 					        FontSize="17" FontWeight="Normal"
-					        Foreground="#888888" Margin="0" />
+					        Foreground="#888888" Margin="0, 0, 0, 10" />
                 </Grid>
 
-                <Grid Background="Transparent" Height="Auto" Grid.Row="1" Margin="15, 15, 15, 15">
+                <Grid Background="Transparent" Height="Auto" Grid.Row="1" Margin="15, 10, 15, 10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <Border Height="60" Grid.Row="0" Margin="0,0,0,0" Width="210" HorizontalAlignment="Left"
+                    <Border Height="60" Grid.Row="0" Margin="0,0,0,0" Width="205" HorizontalAlignment="Left"
                         CornerRadius="5,5,5,5" Background="#FF7DB833" />
-                    <Button Height="60" Grid.Row="0" Margin="0,0,0,0" Width="210" HorizontalAlignment="Left"
+                    <Button Height="60" Grid.Row="0" Margin="0,0,0,0" Width="205" HorizontalAlignment="Left"
 			            VerticalAlignment="Bottom" Content="YUKARI TAŞI"
 			            Background="#FF7DB833" BorderThickness="0" Padding="0" FontSize="18"/>
 
-                    <Border Height="60" Grid.Row="0" Margin="0,0,0,0" Width="210" HorizontalAlignment="Right"
+                    <Border Height="60" Grid.Row="0" Margin="0,0,0,0" Width="205" HorizontalAlignment="Right"
                         CornerRadius="5,5,5,5" Background="#FFC65742" />
-                    <Button Height="60" Grid.Row="0" Margin="0,0,0,0" Width="210" HorizontalAlignment="Right"
+                    <Button Height="60" Grid.Row="0" Margin="0,0,0,0" Width="205" HorizontalAlignment="Right"
 			            VerticalAlignment="Bottom" Content="AŞAĞI TAŞI"
 			            Background="#FFC65742" BorderThickness="0" Padding="0" FontSize="18"/>
                 </Grid>
 
-                <Grid Background="White" Height="Auto" Grid.Row="2" Margin="15, 15, 15, 15">
+                <Grid Background="White" Height="Auto" Grid.Row="2" Margin="15, 10, 15, 10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -117,7 +122,7 @@
 					        Foreground="#888888" Margin="0" TextAlignment="Center" />
                 </Grid>
 
-                <Grid Background="White" Grid.Row="3" Height="Auto" Margin="15, 15, 15, 15">
+                <Grid Background="White" Grid.Row="3" Height="Auto" Margin="15, 10, 15, 10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -128,10 +133,16 @@
                                     ItemsSource="{Binding ComplaintCommentList}" />
 
                     <Border Height="60" Grid.Row="1" Margin="0,0,0,0" Width="436" HorizontalAlignment="Center" 
-                        Background="#D0D0D0" />
-                    <Button Height="60" Grid.Row="1" Margin="0,0,0,0" Width="436" HorizontalAlignment="Center"
+                        Background="#F8F8F8" />
+                    <Button Name="TumYorumlarButton" Height="60" Grid.Row="1" Margin="0,0,0,0" Width="436" HorizontalAlignment="Center"
 			            VerticalAlignment="Bottom" Content="Tüm Yorumları Görüntüle {\d}" Foreground="#444444"
-			            Background="#D0D0D0" BorderThickness="0" Padding="0" FontSize="16"/>
+			            Background="#F8F8F8" BorderThickness="0" Padding="0" FontSize="16"/>
+
+                    <Button Name="IlkYorumButton" Height="60" Grid.Row="1" Margin="0,0,0,0" Width="436" HorizontalAlignment="Center"
+			            VerticalAlignment="Bottom" Content="İlk Yorumu Yap" Foreground="#444444"
+			            Background="#F8F8F8" BorderThickness="0" Padding="0" FontSize="16" Visibility="Collapsed"/>
+
+
                 </Grid>
 
             </Grid>
