@@ -25,6 +25,7 @@ namespace EnforceWindowsPhoneApp
         public LoginPage()
         {
             InitializeComponent();
+            LoggedInControl();
         }
 
         private void dowloadUserInfoFromAPI(object sender, DownloadStringCompletedEventArgs e)
@@ -85,9 +86,23 @@ namespace EnforceWindowsPhoneApp
                 return;
             }
 
+            LoginPanel.Visibility = Visibility.Collapsed;
+            LoadingPanel.Visibility = Visibility.Visible;
+
             //String json = @"{""email"":""onur@onur.com"",""password"":""123""}";
             String json = "{\"email\" : \"" + email + "\", \"password\" : \"" + password + "\"}";
-            var res = await User.Login(json);
+            String responseLogin = await User.Login(json);
+            if (responseLogin != null && responseLogin != "")
+            {
+                User loggedInUser = User.parseUser(responseLogin);                
+                NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+            }
+            else
+            {
+                MessageBox.Show("Lütfen kullanıcı adınızı ve şifrenizi kontrol ediniz.");
+                LoginPanel.Visibility = Visibility.Visible;
+                LoadingPanel.Visibility = Visibility.Collapsed;
+            }
         }
 
     }
